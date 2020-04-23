@@ -9,7 +9,7 @@ class QuestionManager(models.Manager):
 
 class Question(models.Model):
     objects=QuestionManager()
-    title = models.CharField(max_lenght=255)
+    title = models.CharField(max_length=255)
     text = models.TextField()
     added_at = models.DateTimeField(blank=True, auto_now_add=True)
     rating = models.IntegerField(default=0)
@@ -18,7 +18,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     text = models.TextField()
-    added_at = models.DateTimeField(balnk=True, auto_new_add=True)
+    added_at = models.DateTimeField(blank=True, auto_now_add=True)
     question = models.ForeignKey(Question)
     author = models.ForeignKey(User)
 # Create your models here.
