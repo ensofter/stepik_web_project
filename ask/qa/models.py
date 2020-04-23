@@ -13,12 +13,12 @@ class Question(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(blank=True, auto_now_add=True)
     rating = models.IntegerField(default=0)
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     likes = models.ManyToManyField(User, related_name='question_like_user')
 
 class Answer(models.Model):
     text = models.TextField()
     added_at = models.DateTimeField(blank=True, auto_now_add=True)
-    question = models.ForeignKey(Question)
-    author = models.ForeignKey(User)
+    question = models.ForeignKey(Questioni, null=True, on_delete=models.SET_NULL)
+    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 # Create your models here.
