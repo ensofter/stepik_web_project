@@ -1,0 +1,12 @@
+<div>
+    <h1>Question detail</h1>
+</div>
+
+    <div>   
+        <h1>{{ question.title }}</h1>
+        <p>{{ question.text }}</p>    
+        {% for a in answers %}
+          <p>{{a.text}}</p>
+        {% endfor %}
+    </div>
+

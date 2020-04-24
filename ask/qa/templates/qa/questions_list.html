@@ -1,0 +1,22 @@
+<div>
+    <h1><a href="/">Questions board</a></h1>
+</div>
+
+{% for question in questions %}
+    <div>   
+        <h1>{{ question.title }}</h1>
+        <a href="{% url 'question' pk=question.pk %}">{{ question.get_url }}</a>    
+    </div>
+{% endfor %}
+<nav><ul class="pagination">
+{% for p in paginator.page_range %}
+ {% if p.number == page.number %}
+ <li class="active">
+ {% else %}
+ <li>
+ {% endif %}
+  <a href="{{ paginator.baseurl }}{{ p }}">
+  {{ p }}</a>
+</li>
+{% endfor %}
+</ul></nav>
