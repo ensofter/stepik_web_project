@@ -18,7 +18,7 @@ class Question(models.Model):
     likes = models.ManyToManyField(User, blank=True, related_name='question_like_user')
 
     def get_url(self):
-        return f"/question/{self.pk}"
+        return "/question/{}".format(self.pk)
 
 class Answer(models.Model):
     text = models.TextField()
