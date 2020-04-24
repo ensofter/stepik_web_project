@@ -33,7 +33,7 @@ def popular_questions(request):
 
 def question_detail(request, pk):
     question = get_object_or_404(Question, pk=pk)
-    answers = Answer.objects.all()
+    answers = Answer.objects.filter(question__id = pk)
     return render(request, 'qa/question_detail.html', {
         'question': question,
         'answers': answers,
