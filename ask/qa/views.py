@@ -4,9 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Question, Answer
 from django.shortcuts import get_object_or_404
 from .forms import AskForm, AnswerForm
+from django.views.decorators.http import require_GET
 
-
-
+@require_GET
 def qa_list(request):
     questions = Question.objects.new()
     limit = request.GET.get('limit', 10)
@@ -20,6 +20,7 @@ def qa_list(request):
         'page': page,
     })
 
+@require_GET
 def popular_questions(request):
     questions = Question.objects.popular()
     limit = request.GET.get('limit', 10)
@@ -42,7 +43,7 @@ def question_detail(request, pk):
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        form = AnswerForm(initial={"question": question.id})
+        form = AnswerForm(initial={"question": question.pk})
         answers = Answer.objects.filter(question__id = pk)
         return render(request, 'qa/question_detail.html', {
             'question': question,
@@ -59,8 +60,8 @@ def ask_new_question(request):
             return HttpResponseRedirect(url)
     else:
         form = AskForm()
-    return render(request, 'qa/add_new_question.html', {
-        'form': form,
-    })
+        return render(request, 'qa/add_new_question.html', {
+            'form': form,
+        })
 
 
