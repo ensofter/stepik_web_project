@@ -12,9 +12,9 @@ class Question(models.Model):
     objects=QuestionManager()
     title = models.CharField(max_length=255)
     text = models.TextField()
-    added_at = models.DateTimeField(blank=True, auto_now_add=True)
-    rating = models.IntegerField(default=0, blank=True)
-    author = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    added_at = models.DateTimeField(null=True, auto_now_add=True)
+    rating = models.IntegerField(default=0, null=True)
+    author = models.ForeignKey(User, related_name = "+", null=True, blank=True, on_delete=models.SET_NULL)
     likes = models.ManyToManyField(User, blank=True, related_name='question_like_user')
 
     def get_url(self):

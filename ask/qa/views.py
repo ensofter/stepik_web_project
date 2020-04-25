@@ -34,16 +34,15 @@ def popular_questions(request):
     })
 
 def question_detail(request, pk):
+    question = get_object_or_404(Question, pk=pk)
     if request.method == "POST":
         form = AnswerForm(request.POST)
         if form.is_valid():
             answer = form.save()
-            question = get_object_or_404(Question, pk=pk)
             url = question.get_url()
             return HttpResponseRedirect(url)
     else:
-        form = AnswerForm()
-        question = get_object_or_404(Question, pk=pk)
+        form = AnswerForm(initial={"question": question.id})
         answers = Answer.objects.filter(question__id = pk)
         return render(request, 'qa/question_detail.html', {
             'question': question,
