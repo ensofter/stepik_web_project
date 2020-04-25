@@ -8,10 +8,5 @@
         {% for a in answers %}
           <p>{{a.text}}</p>
         {% endfor %}
-        <form method="POST">{% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-        </form>
-
     </div>
 

@@ -12,7 +12,7 @@ mysql -uroot -e "grant all privileges on stepic_web.* to 'box'@'localhost' with 
 cd ask
 python3.5 manage.py makemigrations
 python3.5 manage.py migrate
-sudo unicorn --bind 0.0.0.0:8000 ask.wsgi
+sudo gunicorn --bind 0.0.0.0:8000 ask.wsgi
 #sudo ln -sf /home/box/web/etc/nginx.conf /etc/nginx/sites-enabled/default
 #sudo /etc/init.d/nginx restart
 #sudo ln -sf /home/box/web/etc/gunicorn.conf /etc/gunicorn.d/wsgi.example
