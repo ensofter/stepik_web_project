@@ -3,8 +3,10 @@ from django.core.paginator import Paginator
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Question, Answer
 from django.shortcuts import get_object_or_404
-from .forms import AskForm, AnswerForm
+from .forms import AskForm, AnswerForm, SignUpForm, LoginForm
 from django.views.decorators.http import require_GET
+from django.contrib.auth import login, authenticate
+from django.contrib.auth.forms import UserCreationForm
 
 @require_GET
 def qa_list(request):
@@ -42,6 +44,8 @@ def question_detail(request, pk):
             answer = form.save()
             url = question.get_url()
             return HttpResponseRedirect(url)
+        else:
+            return HttpResponse('200')
     else:
         form = AnswerForm(initial={"question": question.pk})
         answers = Answer.objects.filter(question__id = pk)
@@ -64,4 +68,41 @@ def ask_new_question(request):
             'form': form,
         })
 
+def signup(request):
+    if request.method == "POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return HttpResponseRedirect('/')
+    else:
+        form = SignUpForm()
+    return render(request, 'qa/signup.html', {
+        'form': form,
+        'user': request.user,
+        'session': request.session,
+    })
+
+def signin(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = request.POST['username']
+            password = request.POST['password']
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return HttpResponseRedirect('/')
+            else:
+                return HttpResponse('No')
+    else:
+        form = LoginForm()
+    return render(request, 'qa/login.html', {
+        'form': form,
+        'user': request.user,
+        'session': request.session,
+    })
 
