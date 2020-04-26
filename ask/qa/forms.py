@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth import authenticate
 from .models import Question, Answer
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -16,17 +17,57 @@ class AnswerForm(forms.ModelForm):
         model = Answer
         fields = ('text', 'question')
 
-class SignUpForm(UserCreationForm):
-    username = forms.CharField(max_length=30, required=True,)
-    email = forms.EmailField(max_length=24)
-    password1 = forms.PasswordInput()
-    password2 = None
+class SignupForm(forms.Form):
+    username = forms.CharField(max_length=100)
+    email = forms.EmailField()
+    password = forms.CharField(widget=forms.PasswordInput)
 
-    class Meta:
-        model = User
-        fields = ('username', 'email', 'password1')
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if username.strip() == '':
+            raise forms.ValidationError(
+                u'Username is empty', code='validation_error')
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email.strip() == '':
+            raise forms.ValidationError(
+                u'Email is empty', code='validation_error')
+        return email
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if password.strip() == '':
+            raise forms.ValidationError(
+                u'Password is empty', code='validation_error')
+        return password
+
+    def save(self):
+        user = User.objects.create_user(**self.cleaned_data)
+        user.save()
+        auth = authenticate(**self.cleaned_data)
+        return auth
+
 
 class LoginForm(forms.Form):
-    username = forms.CharField(max_length=30, required=True)
-    password = forms.CharField()
+    username = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput)
 
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        if username.strip() == '':
+            raise forms.ValidationError(
+                u'Username is empty', code='validation_error')
+        return username
+
+    def clean_password(self):
+        password = self.cleaned_data['password']
+        if password.strip() == '':
+            raise forms.ValidationError(
+                u'Password is empty', code='validation_error')
+        return password
+
+    def save(self):
+        user = authenticate(**self.cleaned_data)
+        return user

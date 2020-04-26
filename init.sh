@@ -18,4 +18,4 @@ sudo /etc/init.d/nginx restart
 #sudo gunicorn --bind 0.0.0.0:8000 ask.wsgi
 python3 ask/manage.py makemigrations
 python3 ask/manage.py migrate --run-syncdb
-python3 ask/manage.py runserver 0.0.0.0:8000:
+python3 ask/manage.py runserver 0.0.0.0:8000
